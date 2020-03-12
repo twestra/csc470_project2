@@ -22,16 +22,21 @@ def D_Recognize(tape, startState, finalStates, transitionTable):
     index = tape[tapeIndex]
     current_state = startState
     remainingTape = len(tape)
-     
+    
     while remainingTape >= 0:
         #look to see which conditionals will become true
         #first we check if the next state exists
         null_transition = False
+        transition_found = False
         for i in range(len(transitionTable)):
             if transitionTable[i][0] == current_state and transitionTable[i][1] == index and transitionTable[i][2] == "NULL":
                 null_transition = True
+                transition_found = True
             elif transitionTable[i][0] == current_state and transitionTable[i][1] == index:
                 next_state = transitionTable[i][2]
+                transition_found = True
+        if not transition_found:
+            return("String contains character not in alphabet")
         #then we check if the current state is an accepting one
         in_final = False
         for i in range(len(finalStates)):
@@ -43,16 +48,13 @@ def D_Recognize(tape, startState, finalStates, transitionTable):
         #case where end of input has been reached
         if remainingTape == 0:
             if in_final == True:
-                print("accept")
-                return 0
+                return("accept")
             else:
-                print("reject")
-                return 0
+                return("reject")
         
         #case where there is no transition for the current state and tape index
         elif null_transition == True:
-            print("reject")
-            return 0
+            return("reject")
             
         #case where we advance to next state and try again
         else:
@@ -61,24 +63,11 @@ def D_Recognize(tape, startState, finalStates, transitionTable):
             if (tapeIndex < len(tape)):
                 index = tape[tapeIndex]
             remainingTape -= 1
-
-    return 0
             
     
     
 #for parsing transition table into 2d array of lists, where each row represents a transition
-def transitionparser(lines):
-    strings = []
-    parsedstrings = [['']*3]*lines
-    i = 0
-    f = open("transitionTable.txt", "r")
-    strings = f.readlines()
-    f.close()
-    for string in strings:
-        newstring = string.replace('\n', '')
-        parsedstrings[i] = newstring.split(', ')
-        i+=1
-    return parsedstrings
+d
 #for parsing end states into list
 def finalstatesparser():
     strings = []
@@ -97,26 +86,26 @@ if __name__ == "__main__":
     
     #tape
     args = sys.argv[1:]
-    print args
+    #print args
     tape = (" ".join(args))
-    print tape
+    #print(tape)
     
     #start state:
     fss = open("startState.txt")
     startstate = fss.read()
     fss.close()
-    print "This is the startstate: "
-    print startstate
+    #print "This is the startstate: "
+    #print startstate
     
     #final states
-    print "These are the final states: "
+    #print "These are the final states: "
     finalStates = finalstatesparser()
-    print finalStates
+    #print finalStates
     
     #transition table:
-    print "These are the transitions"
+    #print "These are the transitions"
     transition_table = transitionparser(15)
-    print transition_table
+    #print(transition_table)
 
     #D-Recognize algorithm
-    D_Recognize(tape, startstate, finalStates, transition_table)
+    print(D_Recognize(tape, startstate, finalStates, transition_table))
