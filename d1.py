@@ -1,4 +1,5 @@
 import sys
+import os
 
 #def D_Recognize(tape, machine):
 #    index = #beginning of tape
@@ -63,11 +64,22 @@ def D_Recognize(tape, startState, finalStates, transitionTable):
             if (tapeIndex < len(tape)):
                 index = tape[tapeIndex]
             remainingTape -= 1
-            
-    
-    
+
 #for parsing transition table into 2d array of lists, where each row represents a transition
-d
+def transitionparser(lines):
+    strings = []
+    parsedstrings = [['']*3]*lines
+    i = 0
+    f = open("transitionTable.txt", "r")
+    strings = f.readlines()
+    f.close()
+    for string in strings:
+        newstring = string.replace('\n', '')
+        newnewstring = newstring.replace('\"', '')
+        parsedstrings[i] = newnewstring.split(', ')
+        i+=1
+    return parsedstrings
+    
 #for parsing end states into list
 def finalstatesparser():
     strings = []
@@ -82,13 +94,22 @@ def finalstatesparser():
         
 
 if __name__ == "__main__":
-    #need - start states, end states, tape
+    #change working directory depending on argument specified by user
+    arg1 = int(sys.argv[1])
+    
+    if (arg1 == 1):
+        os.chdir("Machine1")
+    elif (arg1 == 2):
+        os.chdir("Machine2")
+    else:
+        print("Incorrect syntax for machine specification. Exiting.")
+        sys.exit()
+    
     
     #tape
-    args = sys.argv[1:]
+    arg2 = sys.argv[2]
     #print args
-    tape = (" ".join(args))
-    #print(tape)
+    tape = arg2
     
     #start state:
     fss = open("startState.txt")
@@ -104,7 +125,10 @@ if __name__ == "__main__":
     
     #transition table:
     #print "These are the transitions"
-    transition_table = transitionparser(15)
+    if (arg1 == 1):
+        transition_table = transitionparser(15)
+    elif (arg1 == 2):
+        transition_table = transitionparser(20)
     #print(transition_table)
 
     #D-Recognize algorithm

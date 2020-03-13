@@ -1,4 +1,5 @@
 import sys
+import os
 
 def D_Recognize2(tape, startState, finalStates, transitionTable):
     
@@ -115,30 +116,42 @@ def finalstatesparser():
         
 
 if __name__ == "__main__":
-    #need - start states, end states, tape
+    #change working directory depending on argument specified by user
+    arg1 = int(sys.argv[1])
+    
+    if (arg1 == 1):
+        os.chdir("Machine1")
+    elif (arg1 == 2):
+        os.chdir("Machine2")
+    else:
+        print("Incorrect syntax for machine specification. Exiting.")
+        sys.exit()
+    
     
     #tape
-    args = sys.argv[1:]
+    arg2 = sys.argv[2]
     #print args
-    tape = (" ".join(args))
-    #print tape
+    tape = arg2
     
     #start state:
     fss = open("startState.txt")
     startstate = fss.read()
     fss.close()
-#    print "This is the startstate: "
-#    print startstate
+    #print "This is the startstate: "
+    #print startstate
     
     #final states
-#    print "These are the final states: "
+    #print "These are the final states: "
     finalStates = finalstatesparser()
-#    print finalStates
+    #print finalStates
     
     #transition table:
-#    print "These are the transitions"
-    transition_table = transitionparser(15)
-#    print transition_table
+    #print "These are the transitions"
+    if (arg1 == 1):
+        transition_table = transitionparser(15)
+    elif (arg1 == 2):
+        transition_table = transitionparser(20)
+    #print(transition_table)
 
     #D-Recognize algorithm
     print(D_Recognize2(tape, startstate, finalStates, transition_table))
